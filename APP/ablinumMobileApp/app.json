@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ablinumMobileApp",
+    "name": "TablinumMobileApp",
     "slug": "ablinumMobileApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,13 +15,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teletubi1709.ablinumMobileApp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.teletubi1709.ablinumMobileApp"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -31,6 +33,11 @@
             "@expo/.*"
           ]
         }
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3dc6e846-72b2-410d-839a-dcdbfd3e4c76"
       }
     }
   }

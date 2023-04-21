@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -10,10 +10,19 @@ import {
 } from "react-native";
 import fondo from "../assets/fondo2.png";
 
-const LandingScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   const [usuario, setUsuario] = useState("");
   const [clave, setClave] = useState("");
 
+  const setNavi = () => {
+    navigation.setOptions({
+      headerTransparent: true, // hace la barra de navegación transparente
+      headerTitle: "",
+    });
+  };
+  useEffect(() => {
+    setNavi();
+  }, []);
   const validarDatos = () => {
     if (usuario === "Museo" && clave === "1234") {
       navigation.navigate("Landing", { usuario: 1 });
@@ -106,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LandingScreen;
+export default HomeScreen;

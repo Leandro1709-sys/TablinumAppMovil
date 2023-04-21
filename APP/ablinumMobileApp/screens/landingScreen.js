@@ -1,25 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
 import LogoMuseo from "../assets/img/museo.png";
 import fondo from "../assets/fondo2.png";
 
 const LandingScreen = ({ route, navigation }) => {
-  navigation.setOptions({
-    headerTransparent: true, // hace la barra de navegación transparente
-    headerTitle: () => (
-      <Text style={styles.headerTitle}>MUSEO DE CIENCIAS NATURALES</Text>
-    ),
-    headerBackTitle: "Atrás",
-    headerTintColor: "#fff", // cambia el color de la flecha de retroceso a blanco
-    headerTitleAlign: "center",
-  });
-
   const { usuario } = route.params;
 
-  console.log("usuario --->>> ", usuario);
+  const setNavi = () => {
+    navigation.setOptions({
+      headerTransparent: true, // hace la barra de navegación transparente
+      headerTitle: "SELECCIONE CATÁLOGO",
+      headerBackTitle: "Atrás",
+      headerTintColor: "#000000", // cambia el color de la flecha de retroceso a blanco
+      headerTitleAlign: "center",
+    });
+  };
+  useEffect(() => {
+    setNavi();
+  }, []);
+
+  //console.log("usuario --->>> ", usuario);
 
   const handlePress = (cual) => {
-    console.log("cual ---ZZZZ", cual);
+    //   console.log("cual ---ZZZZ", cual);
     cual == "verte"
       ? navigation.navigate("Search", { numeroCatalogo: 1, usuario })
       : navigation.navigate("Search", { numeroCatalogo: 2, usuario });
@@ -39,6 +42,7 @@ const LandingScreen = ({ route, navigation }) => {
             style={styles.image}
           />
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => handlePress("flora")}
           style={styles.touchableOpacity2}
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    marginBottom: 100,
+    marginBottom: 150,
   },
   touchableOpacity2: {
     width: "100%",
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    // marginBottom: 70,
+    //marginBottom: 70,
   },
   image: {
     width: "35%",

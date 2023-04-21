@@ -1,32 +1,155 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
-import { subespecimen } from "./functions";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Linking,
+  TouchableOpacity,
+} from "react-native";
+import { subespecimen, decimalAGrado } from "./functions";
 import fondo from "../assets/fondo2.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 //import { decode as atob } from "base-64";
 
 const ResultScreen = ({ route, navigation }) => {
   // console.log(route.params.results);
   const especies = [route.params.results];
+  const numero = [route.params.n];
+
   const [img, setImg] = useState("");
-  // console.log(especies);
-  navigation.setOptions({
-    headerTransparent: true, // hace la barra de navegación transparente
-    headerTitle: () => <Text style={styles.headerTitle}>DETALLES</Text>,
-    headerBackTitle: "Atrás",
-    headerTintColor: "#fff", // cambia el color de la flecha de retroceso a blanco
-    headerTitleAlign: "center",
-  });
-  function abririmagen(el) {
-    Swal.fire({
-      imageUrl: `${el}`,
-      imageHeight: 300,
-      backdrop: `
-    rgba(80, 77, 77, 0.70)
-    no-repeat
-        `,
+  console.log(especies);
+
+  console.log(numero[0]);
+  const setNavi = () => {
+    navigation.setOptions({
+      headerTransparent: true, // hace la barra de navegación transparente
+      headerTitle: numero == 1 ? "PALEOVERTEBRADOS" : "PALEOFLORA",
+      headerBackTitle: "Atrás",
+      headerTintColor: "#000000", // cambia el color de la flecha de retroceso a blanco
+      headerTitleAlign: "center",
     });
-  }
+  };
+
+  const handlePress = () => {
+    Linking.openURL(
+      "https://www.google.com/maps/place/" +
+        especies[0].coordlat +
+        "," +
+        especies[0]?.coordlong
+    );
+  };
+
+  useEffect(() => {
+    setNavi();
+  }, []);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 0,
+    },
+    scrollView: {
+      borderRadius: 10,
+      marginTop: "20%",
+      padding: 5,
+    },
+    itemContainer: {
+      padding: 0,
+      marginBottom: 0,
+      flexDirection: "column",
+      borderRadius: 10,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      //   marginBottom: 20,
+    },
+    row: {
+      flex: 1,
+      flexDirection: "column",
+      // marginBottom: 10,
+      fontSize: 20,
+      width: "100%",
+      alignItems: "center",
+      //  marginBottom: 10,
+      backgroundColor: numero
+        ? numero === 1
+          ? "rgba(255, 255, 255, 0.9)"
+          : "rgba(255, 255, 255, 0.9)"
+        : "",
+      borderBottomEndRadius: 5,
+      borderBottomStartRadius: 5,
+      borderTopRightRadius: 6,
+      borderTopLeftRadius: 6,
+    },
+    label: {
+      flex: 1,
+      fontSize: 19,
+      width: "100%",
+      fontWeight: 500,
+      justifyContent: "center",
+      backgroundColor: numero
+        ? numero == 1
+          ? "rgba(173, 166, 109, 0.9)"
+          : "rgba(60, 118, 230, 0.95)"
+        : "",
+      borderTopRightRadius: 5,
+      borderTopLeftRadius: 5,
+    },
+    text: {
+      margin: 20,
+      fontSize: 20,
+      fontWeight: "400",
+      color: "#000",
+
+      //  marginBottom: 10,
+      borderTopRightRadius: 5,
+      borderTopLeftRadius: 5,
+      borderBottomEndRadius: 5,
+      borderBottomStartRadius: 5,
+    },
+    textArr: {
+      fontSize: 20,
+      margin: 5,
+    },
+    textCoor: {
+      fontSize: 20,
+      marginBottom: 15,
+    },
+    backgroundImage: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    },
+    headerTitle: {
+      fontSize: 25,
+      // fontWeight: "bold",
+      color: "#000000",
+      fontWeight: "bold",
+      borderRadius: 5,
+      width: "100%",
+    },
+    textMap: {
+      backgroundColor: numero
+        ? numero == 1
+          ? "rgba(173, 166, 109, 0.9)"
+          : "rgba(60, 118, 230, 0.95)"
+        : "",
+      width: 200,
+      height: 36,
+      margin: 15,
+      borderRadius: 5,
+      textAlign: "center",
+      verticalAlign: "middle",
+      fontSize: 17,
+      fontWeight: 500,
+    },
+  });
+
   // const imagenCodificada = especies[0].imagen[0]; // Obtener la cadena de texto codificada en base64
   // const rutaImagen = `data:image/jpeg;base64,${atob(imagenCodificada)}`;
 
@@ -63,11 +186,32 @@ const ResultScreen = ({ route, navigation }) => {
                 {JSON.stringify(el.especie).slice(1, -1)}
               </Text>
             </View>
+
             <View style={styles.row}>
-              <Text style={[styles.label, styles.labelSmall]}>Posición</Text>
-              <Text style={styles.text}>
-                {JSON.stringify(el.posicionfilo).slice(1, -1)}
+              <Text style={[styles.label, styles.labelSmall]}>
+                Posición Filogenética
               </Text>
+
+              {el.posicionfilo.map((ele) => {
+                return (
+                  <Text style={styles.textArr}>
+                    {"- " + JSON.stringify(ele).slice(1, -1)}
+                  </Text>
+                );
+              })}
+            </View>
+            <View style={styles.row}>
+              <Text style={[styles.label, styles.labelSmall]}>
+                Partes Esqueletales
+              </Text>
+
+              {el.partesesqueletales.map((ele) => {
+                return (
+                  <Text style={styles.textArr}>
+                    {"- " + JSON.stringify(ele).slice(1, -1)}
+                  </Text>
+                );
+              })}
             </View>
             <View style={styles.row}>
               <Text style={[styles.label, styles.labelSmall]}>Periodo</Text>
@@ -112,17 +256,13 @@ const ResultScreen = ({ route, navigation }) => {
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={[styles.label, styles.labelSmall].slice(1, -1)}>
-                Campaña
-              </Text>
+              <Text style={[styles.label, styles.labelSmall]}>Campaña</Text>
               <Text style={styles.text}>
                 {JSON.stringify(el.campana).slice(1, -1)}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={[styles.label, styles.labelSmall].slice(1, -1)}>
-                Nro Campo
-              </Text>
+              <Text style={[styles.label, styles.labelSmall]}>Nro Campo</Text>
               <Text style={styles.text}>
                 {JSON.stringify(el.nrocampo).slice(1, -1)}
               </Text>
@@ -145,18 +285,25 @@ const ResultScreen = ({ route, navigation }) => {
                 {JSON.stringify(el.preparacionfecha).slice(1, -1)}
               </Text>
             </View>
-            <View style={styles.row}>
-              <Text style={[styles.label, styles.labelSmall]}>Partes</Text>
-              <Text style={styles.text}>
-                {JSON.stringify(el.partesesqueletales).slice(1, -1)}
-              </Text>
-            </View>
 
             <View style={styles.row}>
               <Text style={[styles.label, styles.labelSmall]}>Comentarios</Text>
               <Text style={styles.text}>
                 {JSON.stringify(el.comentario).slice(1, -1)}
               </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={[styles.label, styles.labelSmall]}>Ubicacion</Text>
+              <Text style={styles.textArr}>
+                {decimalAGrado(el.coordlat, el.coordlong).latitud.completa}
+              </Text>
+              <Text style={styles.textCoor}>
+                {decimalAGrado(el.coordlat, el.coordlong).longitud.completa}
+              </Text>
+              <TouchableOpacity onPress={handlePress}>
+                <Text style={styles.textMap}>ver en maps!</Text>
+              </TouchableOpacity>
             </View>
             {/* <View style={styles.row}>
               <Text style={[styles.label, styles.labelSmall]}>IMAGENES</Text>
@@ -173,82 +320,5 @@ const ResultScreen = ({ route, navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 0,
-  },
-  scrollView: {
-    borderRadius: 10,
-    marginTop: "20%",
-    padding: 8,
-  },
-  itemContainer: {
-    padding: 0,
-    marginBottom: 10,
-    flexDirection: "column",
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  row: {
-    flex: 1,
-    flexDirection: "column",
-    marginBottom: 10,
-    fontSize: 20,
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 15,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderBottomEndRadius: 5,
-    borderBottomStartRadius: 5,
-    borderTopRightRadius: 6,
-    borderTopLeftRadius: 6,
-    borderColor: "#000000",
-    borderWidth: 0.3,
-  },
-  label: {
-    borderColor: "#000000",
-    borderWidth: 0.3,
-    flex: 1,
-    fontSize: 21,
-    width: "100%",
-    justifyContent: "center",
-    backgroundColor: "rgba(173, 166, 109, 0.9555)",
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-  },
-  text: {
-    margin: 10,
-    fontSize: 22,
-    fontWeight: "500",
-    color: "#000",
-
-    marginBottom: 10,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderBottomEndRadius: 5,
-    borderBottomStartRadius: 5,
-  },
-  backgroundImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-  },
-  headerTitle: {
-    fontSize: 25,
-    // fontWeight: "bold",
-    color: "#000000",
-    fontWeight: "bold",
-    borderRadius: 5,
-    width: "100%",
-  },
-});
 
 export default ResultScreen;
